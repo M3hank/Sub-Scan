@@ -1,9 +1,8 @@
+from asyncio import Queue #Module To Coordinate Producers
 import requests #Module to Request Website
 import argparse #Module to Parse Arguments
 import threading #Module for multi-threading
-from asyncio import Queue #Module To Coordinate Producers
 # This Script Is Made For Educational Purposes
-
 #Creating a Parser
 parser = argparse.ArgumentParser()
 
@@ -43,24 +42,16 @@ def subdomain(subdomain):
         if r.status_code == 200:
             print(f"\033[0;32m Subdomain Found -->{subdomain}.{domain}")
             with open("output.txt", "a") as f:
-                f.write(f"{subdomain}.{domain}")
+                f.write(f"{subdomain}.{domain}\n")
         else:
             print(f"\033[0;31m {subdomain}.{domain}")
     except:
         print(f"\033[0;31m {subdomain}.{domain}")
 
 
-# Function to Use Thread.
-def threader():
-    while True:
-        worker = q.get()
-        subdomain(worker)
-        q.task_done()
-
-
 # Function to Use multiple threads.
 def main():
-    q = queue.Queue()
+    q = Queue.Queue()
     for x in range(int(threads)):
         t = threading.Thread(target=threader)
         t.daemon = True
@@ -70,6 +61,13 @@ def main():
             q.put(line.strip())
     q.join()
 
+
+# Function to Use Thread.
+def threader():
+    while True:
+        worker = Queue.get()
+        subdomain(worker)
+        Queue.task_done()
 
 #Function to use verbosity.
 def verbose():
