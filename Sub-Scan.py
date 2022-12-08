@@ -1,4 +1,4 @@
-from asyncio import Queue #Module To Coordinate Producers
+import queue #Module To Coordinate Producers
 import requests #Module to Request Website
 import argparse #Module to Parse Arguments
 import threading #Module for multi-threading
@@ -51,7 +51,7 @@ def subdomain(subdomain):
 
 # Function to Use multiple threads.
 def main():
-    q = Queue.Queue()
+    q = queue.Queue()
     for x in range(int(threads)):
         t = threading.Thread(target=threader)
         t.daemon = True
@@ -65,9 +65,9 @@ def main():
 # Function to Use Thread.
 def threader():
     while True:
-        worker = Queue.get()
+        worker = queue.get()
         subdomain(worker)
-        Queue.task_done()
+        queue.task_done()
 
 #Function to use verbosity.
 def verbose():
