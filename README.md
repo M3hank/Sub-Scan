@@ -23,7 +23,7 @@ Sub-Scan Requires Following Modules
 ## Usage
 
 ```
-python3 Sub-Scan.py -d [domain name] -w [wordlist] -v [Verbosity] -t [Number of Threads]
+python3 Sub-Scan.py -d [domain name] -w [wordlist]  -t [Number of Threads]
 ```
 
 ## Available Arguments
@@ -34,8 +34,6 @@ Options         descrption
 -d               Domain Name 
 
 -w               Wordlist To Use for Enumeration
-
--v               Verbose Output
 
 -t               Multi-Threading
 
@@ -50,10 +48,8 @@ Options         descrption
 
 ## Wordlist Credits
 
--[Seclists](https://www.github.com/danielmiessler/SecLists)
+- [Seclists](https://www.github.com/danielmiessler/SecLists)
 
 ## Contributing
 
 Contributions are always welcome!
-
-
