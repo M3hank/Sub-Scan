@@ -9,7 +9,7 @@ Sub-Scan is A Multi-Threaded Script Written In Python, It Discovers Subdomains F
 git clone https://github.com/M3hank/Sub-Scan.git
 ```
 ```
-sudo pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 ## Requirements
 
