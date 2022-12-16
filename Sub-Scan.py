@@ -1,8 +1,8 @@
-import queue #Module To Coordinate Producers
 import requests #Module to Request Website
 import argparse #Module to Parse Arguments
 import threading #Module for multi-threading
-# This Script Is Made For Educational Purposes
+
+
 #Creating a Parser
 parser = argparse.ArgumentParser()
 
@@ -10,7 +10,6 @@ parser = argparse.ArgumentParser()
 #Adding Arguments
 parser.add_argument('-d','--domain',help='domain',required=True)
 parser.add_argument('-w','--wordlist',help='wordlist',required=True)
-parser.add_argument('-v','--verbose',help='Verbose Mode',action='store_true')
 parser.add_argument('-t','--threads',help='Multi-Threading',default = 10)
 args = parser.parse_args()
 
@@ -30,7 +29,6 @@ print("\033[1;36m                                                               
 #defining global variables.
 wordlist = args.wordlist
 domain = args.domain
-verbose = args.verbose
 threads = args.threads
 
 
@@ -38,15 +36,23 @@ threads = args.threads
 def subdomain(subdomain):
     try:
         url = f"http://{subdomain}.{domain}"
-        r = requests.get(url)
-        if r.status_code == 200:
-            print(f"\033[0;32m Subdomain Found -->{subdomain}.{domain}")
+        r = requests.head(url)
+        if r.status_code == 200 or 301:
+            print(f"\033[0;32m Subdomain Found --> {subdomain}.{domain} {r.status_code}")
             with open("output.txt", "a") as f:
-                f.write(f"{subdomain}.{domain}\n")
-        else:
-            print(f"\033[0;31m {subdomain}.{domain}")
+                f.write(f"{subdomain}.{domain} \n")
+        else: 
+         print(f"\033[0;31m Subdomain Found --> {subdomain}.{domain} {r.status_code}")
     except:
-        print(f"\033[0;31m {subdomain}.{domain}")
+        print(f"\033[0;31m {subdomain}.{domain} ")
+
+
+# Function to Use Thread.
+def threader():
+    while True:
+        worker = q.get()
+        subdomain(worker)
+        q.task_done()
 
 
 # Function to Use multiple threads.
@@ -62,20 +68,6 @@ def main():
     q.join()
 
 
-# Function to Use Thread.
-def threader():
-    while True:
-        worker = queue.get()
-        subdomain(worker)
-        queue.task_done()
-
-#Function to use verbosity.
-def verbose():
-    with open(wordlist, "r") as f:
-        for line in f:
-            subdomain(line.strip())
-
-
 #Function to use default threads.
 def default_threads():
     with open(wordlist, "r") as f:
@@ -85,7 +77,4 @@ def default_threads():
 
 #Main function.
 if __name__ == "__main__":
-    if verbose:
-        verbose()
-    else:
-        default_threads()
+    default_threads()
