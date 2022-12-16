@@ -1,7 +1,7 @@
 import requests #Module to Request Website
 import argparse #Module to Parse Arguments
 import threading #Module for multi-threading
-
+import queue #To Support MultiThreading
 
 #Creating a Parser
 parser = argparse.ArgumentParser()
