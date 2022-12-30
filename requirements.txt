@@ -1,4 +1,3 @@
 argparse
 requests
-threading
-queue
+concurrent.futures
