@@ -36,8 +36,8 @@ threads = args.threads
 def subdomain(subdomain):
     try:
         url = f"http://{subdomain}.{domain}"
-        r = requests.head(url)
-        if r.status_code == 200 or 301:
+        r = requests.head(url,allow_redirects=True)
+        if r.status_code == 200:
             print(f"\033[0;32m Subdomain Found --> {subdomain}.{domain} {r.status_code}")
             with open("output.txt", "a") as f:
                 f.write(f"{subdomain}.{domain} \n")
