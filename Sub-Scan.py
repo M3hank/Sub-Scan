@@ -1,80 +1,62 @@
-import requests #Module to Request Website
-import argparse #Module to Parse Arguments
-import threading #Module for multi-threading
-import queue #To Support Multi-Threading
-
-#Creating a Parser
-parser = argparse.ArgumentParser()
+import argparse
+import concurrent.futures
+import requests
 
 
-#Adding Arguments
-parser.add_argument('-d','--domain',help='domain',required=True)
-parser.add_argument('-w','--wordlist',help='wordlist',required=True)
-parser.add_argument('-t','--threads',help='Multi-Threading',default = 10)
-args = parser.parse_args()
-
-#Fancy Banner Font Name:- Bloody
+# Fancy Banner
 print("\033[1;36m ██████  █    ██  ▄▄▄▄          ██████ ▄████▄   ▄▄▄      ███▄    █ \033[0;0m")
 print("\033[1;36m▒██    ▒  ██  ▓██▒▓█████▄      ▒██    ▒▒██▀ ▀█  ▒████▄    ██ ▀█   █ \033[0;0m")
 print("\033[1;36m░ ▓██▄   ▓██  ▒██░▒██▒ ▄██     ░ ▓██▄  ▒▓█    ▄ ▒██  ▀█▄ ▓██  ▀█ ██▒\033[0;0m")
 print("\033[1;36m  ▒   ██▒▓▓█  ░██░▒██░█▀         ▒   ██▒▓▓▄ ▄██▒░██▄▄▄▄██▓██▒  ▐▌██▒\033[0;0m")
 print("\033[1;36m▒██████▒▒▒▒█████▓ ░▓█  ▀█▓     ▒██████▒▒ ▓███▀ ░ ▓█   ▓██▒██░   ▓██░\033[0;0m")
 print("\033[1;36m▒ ▒▓▒ ▒ ░░▒▓▒ ▒ ▒ ░▒▓███▀▒     ▒ ▒▓▒ ▒ ░ ░▒ ▒  ░ ▒▒   ▓▒█░ ▒░   ▒ ▒ \033[0;0m")
-print("\033[1;36m░ ░▒  ░ ░░░▒░ ░ ░ ▒░▒   ░      ░ ░▒  ░ ░ ░  ▒     ▒   ▒▒ ░ ░░   ░ ▒░\033[0;0m")
-print("\033[1;36m ░  ░  ░   ░░░ ░ ░  ░    ░      ░  ░  ░ ░          ░   ▒     ░   ░ ░ \033[0;0m")
-print("\033[1;36m      ░     ░      ░                 ░ ░ ░            ░  ░        ░ \033[0;0m")
-print("\033[1;36m                                                                       Github:- m3hank         \033[0;0m")
+print("")
 
+# Creating a Parser
+parser = argparse.ArgumentParser()
 
-#defining global variables.
+# Adding Arguments
+parser.add_argument('-d', '--domain', help='domain', required=True)
+parser.add_argument('-w', '--wordlist', help='wordlist', required=True)
+parser.add_argument('-t', '--threads', help='Multi-Threading', default=20, type=int)
+parser.add_argument('-o', '--output', help='output file', default=None)
+parser.add_argument('-m', '--max-subdomains', help='maximum number of subdomains to check in the Wordlist', default=None, type=int)
+args = parser.parse_args()
+
+# Defining global variables.
 wordlist = args.wordlist
 domain = args.domain
 threads = args.threads
+output_file = args.output
+max_subdomains = args.max_subdomains
 
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
 
-# Check If The Domain is Available.
-def subdomain(subdomain):
+def sub_brute(subdomain):
     try:
-        url = f"http://{subdomain}.{domain}"
-        r = requests.head(url,allow_redirects=True)
-        if r.status_code == 200:
-            print(f"\033[0;32m Subdomain Found --> {subdomain}.{domain} {r.status_code}")
-            with open("output.txt", "a") as f:
-                f.write(f"{subdomain}.{domain} \n")
-        else: 
-         print(f"\033[0;31m Subdomain Found --> {subdomain}.{domain} {r.status_code}")
-    except:
-        print(f"\033[0;31m {subdomain}.{domain} ")
+        url = f'http://{subdomain}'
+        response = requests.head(url,headers=headers,allow_redirects = True)
+        status = response.status_code
+        if status == 200:
+            print(f'\033[1;32m [+] >> {subdomain}   status-code:[{status}]\033[00m')
+            if output_file:
+                with open(output_file, 'a') as f:
+                    f.write(f'{subdomain}\n')
+        elif status == 301:
+            print(f'\033[1;33m [+] >> {subdomain}   status-code:[{status}]\033[00m)')
+        elif status == 404:
+            print(f'\033[1;31m [+] >> {subdomain} status-code:{status}\033[00m')
+    except Exception as e:
+        pass
 
-
-# Function to Use Thread.
-def threader():
-    while True:
-        worker = q.get()
-        subdomain(worker)
-        q.task_done()
-
-
-# Function to Use multiple threads.
 def main():
-    q = queue.Queue()
-    for x in range(int(threads)):
-        t = threading.Thread(target=threader)
-        t.daemon = True
-        t.start()
-    with open(wordlist, "r") as f:
-        for line in f:
-            q.put(line.strip())
-    q.join()
+    with open(wordlist, 'r') as f:
+        subdomains = [f'{line.strip()}.{domain}' for line in f]
+        if max_subdomains:
+            subdomains = subdomains[:max_subdomains]
+        with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
+            for subdomain in subdomains:
+                executor.submit(sub_brute, subdomain)
 
-
-#Function to use default threads.
-def default_threads():
-    with open(wordlist, "r") as f:
-        for line in f:
-            subdomain(line.strip())
-
-
-#Main function.
-if __name__ == "__main__":
-    default_threads()
+if __name__ == '__main__':
+    main()
