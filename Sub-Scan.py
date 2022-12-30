@@ -4,12 +4,12 @@ import requests
 
 
 # Fancy Banner
-print("\033[1;36m ██████  █    ██  ▄▄▄▄          ██████ ▄████▄   ▄▄▄      ███▄    █ \033[0;0m")
-print("\033[1;36m▒██    ▒  ██  ▓██▒▓█████▄      ▒██    ▒▒██▀ ▀█  ▒████▄    ██ ▀█   █ \033[0;0m")
-print("\033[1;36m░ ▓██▄   ▓██  ▒██░▒██▒ ▄██     ░ ▓██▄  ▒▓█    ▄ ▒██  ▀█▄ ▓██  ▀█ ██▒\033[0;0m")
-print("\033[1;36m  ▒   ██▒▓▓█  ░██░▒██░█▀         ▒   ██▒▓▓▄ ▄██▒░██▄▄▄▄██▓██▒  ▐▌██▒\033[0;0m")
-print("\033[1;36m▒██████▒▒▒▒█████▓ ░▓█  ▀█▓     ▒██████▒▒ ▓███▀ ░ ▓█   ▓██▒██░   ▓██░\033[0;0m")
-print("\033[1;36m▒ ▒▓▒ ▒ ░░▒▓▒ ▒ ▒ ░▒▓███▀▒     ▒ ▒▓▒ ▒ ░ ░▒ ▒  ░ ▒▒   ▓▒█░ ▒░   ▒ ▒ \033[0;0m")
+print("""\033[1;36m ██████  █    ██  ▄▄▄▄          ██████ ▄████▄   ▄▄▄      ███▄    █
+▒██    ▒  ██  ▓██▒▓█████▄      ▒██    ▒▒██▀ ▀█  ▒████▄    ██ ▀█   █
+░ ▓██▄   ▓██  ▒██░▒██▒ ▄██     ░ ▓██▄  ▒▓█    ▄ ▒██  ▀█▄ ▓██  ▀█ ██▒
+  ▒   ██▒▓▓█  ░██░▒██░█▀         ▒   ██▒▓▓▄ ▄██▒░██▄▄▄▄██▓██▒  ▐▌██▒
+▒██████▒▒▒▒█████▓ ░▓█  ▀█▓     ▒██████▒▒ ▓███▀ ░ ▓█   ▓██▒██░   ▓██░
+▒ ▒▓▒ ▒ ░░▒▓▒ ▒ ▒ ░▒▓███▀▒     ▒ ▒▓▒ ▒ ░ ░▒ ▒  ░ ▒▒   ▓▒█░ ▒░   ▒ ▒ \033[0m""")
 print("")
 
 # Creating a Parser
@@ -38,14 +38,14 @@ def sub_brute(subdomain):
         response = requests.head(url,headers=headers,allow_redirects = True)
         status = response.status_code
         if status == 200:
-            print(f'\033[1;32m [+] >> {subdomain}   status-code:[{status}]\033[00m')
+            print(f'\033[92m [+] >> {subdomain}   status-code:[{status}]\033[00m')
             if output_file:
                 with open(output_file, 'a') as f:
                     f.write(f'{subdomain}\n')
         elif status == 301:
-            print(f'\033[1;33m [+] >> {subdomain}   status-code:[{status}]\033[00m)')
+            print(f'\033[93m [+] >> {subdomain}   status-code:[{status}]\033[00m)')
         elif status == 404:
-            print(f'\033[1;31m [+] >> {subdomain} status-code:{status}\033[00m')
+            print(f'\033[91m [+] >> {subdomain} status-code:[{status}]\033[00m')
     except Exception as e:
         pass
 
