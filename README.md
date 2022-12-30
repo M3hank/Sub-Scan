@@ -39,6 +39,8 @@ Options         descrption
 -o               Save Output In A File
 
 -h               Help
+
+-m               Maximum Number Of Words To Iterate Over From Wordlist
 ```
 
 
