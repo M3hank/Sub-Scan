@@ -15,9 +15,8 @@ pip3 install -r requirements.txt
 
 Sub-Scan Requires Following Modules
 `argparse`
-`threading`
 `requests`
-`queue`
+`concurrent.futures`
 
 
 ## Usage
@@ -36,6 +35,8 @@ Options         descrption
 -w               Wordlist To Use for Enumeration
 
 -t               Multi-Threading
+
+-o               Save Output In A File
 
 -h               Help
 ```
