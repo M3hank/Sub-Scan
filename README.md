@@ -22,7 +22,7 @@ Sub-Scan Requires Following Modules
 ## Usage
 
 ```
-python3 Sub-Scan.py -d [domain name] -w [wordlist]  -t [Number of Threads]
+python3 Sub-Scan.py -d [domain name] -w [wordlist]  -t [Number of Threads] -o [filename.txt]
 ```
 
 ## Available Arguments
