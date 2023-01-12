@@ -40,7 +40,6 @@ Options         descrption
 
 -h               Help
 
--m               Maximum Number Of Words To Iterate Over From Wordlist
 ```
 
 
