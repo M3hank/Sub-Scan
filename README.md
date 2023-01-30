@@ -4,7 +4,6 @@ Sub-Scan is A Multi-Threaded Script Written In Python, It Discovers Subdomains F
 
 
 ## Installation
-
 ```
 git clone https://github.com/M3hank/Sub-Scan.git
 ```
