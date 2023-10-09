@@ -11,7 +11,8 @@ git clone https://github.com/M3hank/Sub-Scan.git
 pip3 install -r requirements.txt
 ```
 ## Screenshot
-![Sub-Scan](https://github.com/M3hank/Sub-Scan/assets/70057473/570301da-e7d1-487e-bd16-083a2cf91c14)
+
+![Sub-Scan](https://github.com/M3hank/Sub-Scan/assets/70057473/214593cf-8700-45c5-87ec-e279ef1b703a)
 
 ## Requirements
 
